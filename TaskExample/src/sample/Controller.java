@@ -73,7 +73,7 @@ public class Controller {
                 progressLabel.setVisible(true);
             }
         });
-        
+
         service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent workerStateEvent) {
@@ -82,9 +82,10 @@ public class Controller {
             }
         });
 
-        progressBar.setVisible(false);
-        progressLabel.setVisible(false);
-
+//        progressBar.setVisible(false);
+//        progressLabel.setVisible(false);
+        progressLabel.visibleProperty().bind(service.runningProperty());
+        progressBar.visibleProperty().bind(service.runningProperty());
     }
 
     @FXML

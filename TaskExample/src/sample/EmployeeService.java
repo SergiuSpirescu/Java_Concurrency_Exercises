@@ -26,7 +26,7 @@ public class EmployeeService extends Service<ObservableList<String>> {
                     updateMessage("Loading... " + names[i]);
                     updateProgress(i + 1, 6);
 //                    System.out.println("Added the name: " + names[i]);
-                    Thread.sleep(600);
+                    Thread.sleep(200);
                 }
 
 //                Platform.runLater(new Runnable() {

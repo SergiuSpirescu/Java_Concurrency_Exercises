@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -65,6 +66,12 @@ public class Controller {
 
     @FXML
     public void buttonPressed () {
+
+        if (service.getState() == Service.State.SUCCEEDED) {
+        service.reset();
         service.start();
-    }
+        } else if(service.getState() == Service.State.READY) {
+                service.start();
+            }
+        }
 }

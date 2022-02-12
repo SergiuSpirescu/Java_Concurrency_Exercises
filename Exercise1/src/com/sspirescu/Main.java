@@ -33,7 +33,7 @@ class Tutor {
         this.student = student;
     }
 
-    public synchronized void studyTime() {
+    public void studyTime() {
         System.out.println("Tutor has arrived");
         try {
             // wait for student to arrive and hand in assignment
@@ -46,7 +46,7 @@ class Tutor {
         System.out.println("Tutor is studying with student");
     }
 
-    public synchronized void getProgressReport() {
+    public void getProgressReport() {
         // get progress report
         System.out.println("Tutor gave progress report");
     }
@@ -60,12 +60,12 @@ class Student {
         this.tutor = tutor;
     }
 
-    public synchronized void startStudy() {
+    public void startStudy() {
         // study
         System.out.println("Student is studying");
     }
 
-    public synchronized void handInAssignment() {
+    public void handInAssignment() {
         tutor.getProgressReport();
         System.out.println("Student handed in assignment");
     }

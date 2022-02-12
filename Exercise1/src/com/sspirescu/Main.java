@@ -42,6 +42,8 @@ public class Main {
                 account.withdraw(100.00);
 //
                 System.out.println(account.getBalance());
+
+                account.printAccountNumber();
             }
         });
 

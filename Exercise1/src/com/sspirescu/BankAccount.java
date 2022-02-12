@@ -36,4 +36,28 @@ public class BankAccount {
     public double getBalance() {
         return balance;
     }
+
+    public String getAccountNumber() {
+//
+//        String auxAcc;
+//        synchronized (this) {
+//            auxAcc = accountNumber;
+//        }
+//        return auxAcc;
+          return accountNumber;
+    }
+
+    public void printAccountNumber() {
+//        String auxAcc;
+//        synchronized (this) {
+//            auxAcc = accountNumber;
+//        }
+
+//        System.out.println("Account number = " + auxAcc);
+        System.out.println("Account number = " + accountNumber);
+
+        //No need to syncronize these fields, as they ar only Read.
+        // Synchronizing would harm performance
+
+    }
 }

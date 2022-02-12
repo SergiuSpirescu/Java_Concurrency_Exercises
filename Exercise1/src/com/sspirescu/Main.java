@@ -3,63 +3,70 @@ package com.sspirescu;
 public class Main {
 
     public static void main(String[] args) {
+        Tutor tutor = new Tutor();
+        Student student = new Student(tutor);
+        tutor.setStudent(student);
 
-        final BankAccount account = new BankAccount("12345-678", 1000.00);
-
-//        Thread trThread1 = new Thread() {
-//            public void run() {
-//                account.deposit(300.00);
-//                account.withdraw(50.00);
-//
-//                System.out.println(account.getBalance());
-//            }
-//        };
-//
-//        Thread trThread2 = new Thread () {
-//
-//            public void run() {
-//                account.deposit(203.75);
-//                account.withdraw(100.00);
-//
-//                System.out.println(account.getBalance());
-//            }
-//        };
-
-        Thread trThread1 = new Thread(new Runnable() {
+        Thread tutorThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                int i = 0;
-                while (i<55) {
-                    account.deposit(300.00);
-                    account.withdraw(50.00);
-//
-                    System.out.println(account.getBalance());
-                    i++;
-                }
+                tutor.studyTime();
             }
         });
 
-        Thread trThread2 = new Thread(new Runnable() {
+        Thread studentThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-            int i = 0;
-            while (i<55)
-
-            {
-                account.deposit(203.75);
-                account.withdraw(100.00);
-//
-                System.out.println(account.getBalance());
-
-                account.printAccountNumber();
-                i++;
-            }
+                student.handInAssignment();
             }
         });
 
-        trThread1.start();
-        trThread2.start();
+        tutorThread.start();
+        studentThread.start();
+    }
+}
+
+class Tutor {
+    private Student student;
+
+    public synchronized void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public synchronized void studyTime() {
+        System.out.println("Tutor has arrived");
+        try {
+            // wait for student to arrive and hand in assignment
+            Thread.sleep(300);
+        }
+        catch (InterruptedException e) {
+
+        }
+        student.startStudy();
+        System.out.println("Tutor is studying with student");
+    }
+
+    public synchronized void getProgressReport() {
+        // get progress report
+        System.out.println("Tutor gave progress report");
+    }
+}
+
+class Student {
+
+    private Tutor tutor;
+
+    Student(Tutor tutor) {
+        this.tutor = tutor;
+    }
+
+    public synchronized void startStudy() {
+        // study
+        System.out.println("Student is studying");
+    }
+
+    public synchronized void handInAssignment() {
+        tutor.getProgressReport();
+        System.out.println("Student handed in assignment");
     }
 }

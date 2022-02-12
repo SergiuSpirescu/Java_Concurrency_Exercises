@@ -39,7 +39,7 @@ class NewTutor {
             synchronized (student) {
                 try {
                     // wait for student to arrive
-                    this.wait();
+                    this.wait(); // the lock is released here but the thead doesn't actualy have the lock --> deadlock
                 } catch (InterruptedException e) {
 
                 }
@@ -73,7 +73,8 @@ class NewStudent {
             tutor.getProgressReport();
             synchronized (this) {
                 System.out.println("Student handed in assignment");
-                tutor.notifyAll();
+                tutor.notifyAll(); // this should tell the tutor object the lock can be regained
+                // but the tutor object holds the lock on the student already
             }
         }
     }

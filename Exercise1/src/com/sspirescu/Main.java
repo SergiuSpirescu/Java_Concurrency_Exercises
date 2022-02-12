@@ -1,5 +1,9 @@
 package com.sspirescu;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -28,19 +32,30 @@ public class Main {
 
 class Tutor {
     private Student student;
+    private Lock lock;
 
     public synchronized void setStudent(Student student) {
         this.student = student;
+        this.lock = new ReentrantLock();
     }
 
     public void studyTime() {
         System.out.println("Tutor has arrived");
         try {
-            // wait for student to arrive and hand in assignment
-            Thread.sleep(300);
+            if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
+
+                try {
+                    // wait for student to arrive and hand in assignment
+                    Thread.sleep(300);
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                System.out.println("Cannot get lock!");
+            }
         }
         catch (InterruptedException e) {
-
+           e.printStackTrace();
         }
         student.startStudy();
         System.out.println("Tutor is studying with student");
@@ -55,9 +70,11 @@ class Tutor {
 class Student {
 
     private Tutor tutor;
+    private Lock lock;
 
     Student(Tutor tutor) {
         this.tutor = tutor;
+        this.lock = new ReentrantLock();
     }
 
     public void startStudy() {
@@ -66,7 +83,20 @@ class Student {
     }
 
     public void handInAssignment() {
-        tutor.getProgressReport();
-        System.out.println("Student handed in assignment");
+
+        try {
+            if (lock.tryLock(1000, TimeUnit.MILLISECONDS)) {
+              try {
+                tutor.getProgressReport();
+                System.out.println("Student handed in assignment");
+            } finally {
+                  lock.unlock();
+              }
+            } else {
+                System.out.println("Cannot get lock!");
+            }
+        } catch (InterruptedException e) {
+                e.printStackTrace();
+        }
     }
 }
